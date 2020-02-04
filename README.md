@@ -1,2 +1,3 @@
 # random-number
-random number web
+
+![example](./example.png)

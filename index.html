@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+  </head>
+  <body>
+    <div class="section">
+      <div class="wrapper-div">
+        <span id="result">&nbsp;</span>
+        <div>
+          <button id="randomButton" type="button" class="button">
+            PUSH ME!
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      'use strict'
+      const MAX_COUNT = 5
+      const END_MESSAGE = '끗'
+
+      class RandomBox {
+        constructor(max) {
+          this.stack = []
+          this.min = 1
+          this.max = Math.floor(max) + 1
+        }
+        async pop() {
+          let num = await this.__getRandomInt(this.min, this.max)
+          if (this.stack.length === this.max - 1) {
+            return END_MESSAGE
+          } else if (this.stack.includes(num)) {
+            await console.log('다시 돌려돌려: ' + num)
+            return await this.pop()
+          } else {
+            this.stack.push(num)
+            return num
+          }
+        }
+        async __getRandomInt() {
+          return Math.floor(Math.random() * (this.max - this.min)) + this.min
+        }
+      }
+      export default RandomBox
+
+      var randomBox = new RandomBox(MAX_COUNT)
+      window.onload = function() {
+        let randomButton = document.getElementById('randomButton')
+        randomButton.addEventListener('click', async function() {
+          let num = await randomBox.pop()
+          document.getElementById('result').innerText = num
+          if (num === END_MESSAGE) {
+            randomButton.remove()
+          }
+        })
+      }
+    </script>
+  </body>
+</html>
