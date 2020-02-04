@@ -24,38 +24,24 @@
       const MAX_COUNT = 5
       const END_MESSAGE = '끗'
 
-      class RandomBox {
-        constructor(max) {
-          this.stack = []
-          this.min = 1
-          this.max = Math.floor(max) + 1
+      function shuffle(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1))
+          ;[arr[i], arr[j]] = [arr[j], arr[i]]
         }
-        async pop() {
-          let num = await this.__getRandomInt(this.min, this.max)
-          if (this.stack.length === this.max - 1) {
-            return END_MESSAGE
-          } else if (this.stack.includes(num)) {
-            await console.log('다시 돌려돌려: ' + num)
-            return await this.pop()
-          } else {
-            this.stack.push(num)
-            return num
-          }
-        }
-        async __getRandomInt() {
-          return Math.floor(Math.random() * (this.max - this.min)) + this.min
-        }
+        return arr
       }
-      export default RandomBox
+      var stack = [...Array(MAX_COUNT).keys()]
 
-      var randomBox = new RandomBox(MAX_COUNT)
       window.onload = function() {
         let randomButton = document.getElementById('randomButton')
         randomButton.addEventListener('click', async function() {
-          let num = await randomBox.pop()
-          document.getElementById('result').innerText = num
-          if (num === END_MESSAGE) {
+          shuffle(stack)
+          let num = stack.pop()
+          document.getElementById('result').innerText = num + 1
+          if (stack.length === 0 && num === undefined) {
             randomButton.remove()
+            document.getElementById('result').innerText = END_MESSAGE
           }
         })
       }
