@@ -23,6 +23,7 @@
       'use strict'
       const MAX_COUNT = 5
       const END_MESSAGE = '끗'
+      const DEBOUNCING_INTERVAL = 200
 
       function shuffle(arr) {
         for (let i = arr.length - 1; i > 0; i--) {
@@ -35,14 +36,20 @@
 
       window.onload = function() {
         let randomButton = document.getElementById('randomButton')
-        randomButton.addEventListener('click', async function() {
-          shuffle(stack)
-          let num = stack.pop()
-          document.getElementById('result').innerText = num + 1
-          if (stack.length === 0 && num === undefined) {
-            randomButton.remove()
-            document.getElementById('result').innerText = END_MESSAGE
+        var timer
+        randomButton.addEventListener('click', function() {
+          if (timer) {
+            clearTimeout(timer)
           }
+          timer = setTimeout(function() {
+            shuffle(stack)
+            let num = stack.pop()
+            document.getElementById('result').innerText = num + 1
+            if (stack.length === 0 && num === undefined) {
+              randomButton.remove()
+              document.getElementById('result').innerText = END_MESSAGE
+            }
+          }, DEBOUNCING_INTERVAL)
         })
       }
     </script>
